@@ -156,7 +156,7 @@ class CustomPlugin {
 						)       
 					);
                         // Return the image URL and image tag for Ajax
-					 wp_send_json_success(array('status' => 'success','image_url' => $featured_image_url, 'image_tag' => $image_tag, 'post_id' => $post_id));
+        wp_send_json_success(array('status' => 'success', 'first_letter' => $first_letter, 'image_url' => $featured_image_url, 'image_tag' => $image_tag, 'post_id' => $post_id));
 
                     } else {
                         wp_send_json_error(array('Not_found_image' => 'Image not found'));
@@ -183,10 +183,10 @@ class CustomPlugin {
 
 	function game_page(){
 		
-	   if(isset($_GET['response'])) {
-
-		    echo $image_tag = '<img width="150" height="117" src="' . esc_url($_GET['response']) . '" alt="Featured Image">';
-		   
+	   if(isset($_GET['letter'])) {
+		  $plugin_dir = plugin_dir_path(__FILE__);
+	   	include $plugin_dir . '/templates/game_one_letter.php';
+           
 	   }
 		
 	}
