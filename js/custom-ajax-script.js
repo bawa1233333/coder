@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
                     if (response.data.status == 'success') {
                         // Access the image URL and append image tag to a specific div
                         console.log(response.data.image_url);
-                         window.location.href = '../game/?response=' +response.data.image_url;
+                         window.location.href = '../game_one_letter/?letter=' +response.data.first_letter;
 
                     }
 					else if(response.data.status == 'not_found') {
