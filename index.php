@@ -16,6 +16,7 @@ class CustomPlugin {
         add_filter('posts_where', array($this, 'custom_item_title_like_filter'), 10, 2);
 		add_action('wp_ajax_handle_custom_input_form_submission',array($this,  'handle_custom_input_form_submission'));
 		add_action('wp_ajax_nopriv_handle_custom_input_form_submission',array($this,  'handle_custom_input_form_submission'));
+		add_shortcode('game',array($this,  'game_page'));
 
     }
 
@@ -178,6 +179,17 @@ class CustomPlugin {
         wp_send_json_error(array('Error' => 'Please enter a name.'));
     }
 }
+
+
+	function game_page(){
+		
+	   if(isset($_GET['response'])) {
+
+		    echo $image_tag = '<img width="150" height="117" src="' . esc_url($_GET['response']) . '" alt="Featured Image">';
+		   
+	   }
+		
+	}
 
 
 }
