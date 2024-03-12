@@ -1,0 +1,89 @@
+.custom-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.custom-item h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.custom-content {
+    color: #555;
+}
+
+.custom-image img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 15px;
+}
+
+
+#custom-input-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Add additional styles for responsiveness if needed */
+@media (max-width: 600px) {
+    input {
+        width: 100%;
+    }
+}
+.loader {
+  border: 12px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 25px;
+  height: 25px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.validation-error-message{
+	color: red;
+    font-size: 10px;
+}
+.custom-input-button{
+	 width: 100%;
+    padding: 10px;
+    background-color: #4CAF50; /* Green background color */
+    color: white; /* White text color */
+    border: none; /* Remove borders */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    cursor: pointer; /* Add a pointer cursor on hover */
+}
