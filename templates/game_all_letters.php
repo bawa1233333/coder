@@ -10,7 +10,7 @@ if(isset($_GET['letters'])) {
     // Loop through each letter in the input
     for($i = 0; $i < strlen($full_name); $i++) {
         // Get the current letter
-        $first_letter = strtoupper(substr($full_name, $i, 1));
+        $current_letter = strtoupper(substr($full_name, $i, 1));
 
         // Set up the query arguments to retrieve custom post type entries for the current letter
         $args = array(
@@ -18,7 +18,7 @@ if(isset($_GET['letters'])) {
             'posts_per_page' => -1,
             'orderby'        => 'title',
             'order'          => 'ASC',
-            's'              => $first_letter,
+            's'              => $current_letter,
         );
 
         // Execute the query
@@ -26,9 +26,6 @@ if(isset($_GET['letters'])) {
 
         // Check if posts were found for the current letter
         if ($query->have_posts()) {
-            // Initialize an array to store post data for the current letter
-            $letter_data[$first_letter] = array();
-
             // Loop through each post found for the current letter
             while ($query->have_posts()) {
                 $query->the_post();
@@ -40,7 +37,7 @@ if(isset($_GET['letters'])) {
                 $post_content = get_the_content();
 
                 // Add post data to the array for the current letter
-                $letter_data[$first_letter][] = array(
+                $letter_data[$current_letter][] = array(
                     'title' => $post_title,
                     'image' => $featured_image_url,
                     'content' => $post_content,
@@ -49,6 +46,9 @@ if(isset($_GET['letters'])) {
 
             // Reset post data
             wp_reset_postdata();
+        } else {
+            // If no posts found for the current letter, add an empty entry to the array
+            $letter_data[$current_letter] = array();
         }
     }
 
@@ -74,4 +74,3 @@ if(isset($_GET['letters'])) {
     }
 }
 ?>
-
