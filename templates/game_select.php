@@ -1,12 +1,21 @@
 <?php 
-// Initialize variables
-$first_letter = '';
-$full_name = '';
 
-if(isset($_GET['letters'])) {
-	$full_name = sanitize_text_field($_GET['letters']);
+global $wpdb;
+
+// Table name
+$table_name = $wpdb->prefix . "custom_input_data";
+
+// SQL query to retrieve the latest record ordered by ID in descending order
+$query = "SELECT * FROM $table_name ORDER BY id DESC LIMIT 1";
+
+// Retrieve the result
+$result = $wpdb->get_row($query);
+
+    $full_name = $result->name;
+    $email = $result->email;
+    $birthdate = $result->birthdate;
 	$first_letter = strtoupper(substr($full_name, 0, 1));
-}
+
 ?>
 
 <form method="GET">
