@@ -155,14 +155,58 @@ class CustomPlugin
     }
 
     public function handle_custom_input_form_submission()
-    {
-        global $wpdb;
+{
+    global $wpdb;
 
-        $name = sanitize_text_field($_POST["formData"]["name"]);
-        $email = sanitize_email($_POST["formData"]["email"]);
-        $birthdate = sanitize_text_field($_POST["formData"]["birthdate"]);
+    $name = sanitize_text_field($_POST["formData"]["name"]);
+    $email = sanitize_email($_POST["formData"]["email"]);
+    $birthdate = sanitize_text_field($_POST["formData"]["birthdate"]);
 
-        if (!empty($name)) {
+    if (!empty($name)) {
+        // Check if a record with the same email exists
+        $existing_record = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM {$wpdb->prefix}custom_input_data WHERE email = %s",
+                $email
+            )
+        );
+
+        if ($existing_record) {
+            // If the record exists, update it with the new name and birthdate
+            $update_result = $wpdb->update(
+                "{$wpdb->prefix}custom_input_data",
+                array(
+                    "name" => $name,
+                    "birthdate" => $birthdate,
+                ),
+                array(
+                    "email" => $email
+                ),
+                array(
+                    "%s",
+                    "%s"
+                ),
+                array(
+                    "%s"
+                )
+            );
+
+            if ($update_result !== false) {
+                // Update successful
+                wp_send_json_success([
+                    "status" => "success",
+                    "message" => "Record updated successfully."
+                ]);
+            } else {
+                // Update failed
+                wp_send_json_error([
+                    "status" => "error",
+                    "message" => "Error updating record."
+                ]);
+            }
+        } else {
+            // If the record does not exist, proceed with the existing logic to insert the data
+
             // Get the first letter of the name
             $first_letter = strtoupper(substr($name, 0, 1));
 
@@ -209,14 +253,22 @@ class CustomPlugin
                                 "birthdate" => $birthdate,
                                // "first_letter" => $post_first_letter,
                             ]);
-                            wp_send_json_success([
-                                "status" => "success",
-                                "first_letter" => $first_letter,
-                                "full_name" => $name,
-                                "image_url" => $featured_image_url,
-                                "image_tag" => $image_tag,
-                                "post_id" => $post_id,
-                            ]);
+							
+                            if ($insert !== false) {
+                                wp_send_json_success([
+                                    "status" => "success",
+                                    "first_letter" => $first_letter,
+                                    "full_name" => $name,
+                                    "image_url" => $featured_image_url,
+                                    "image_tag" => $image_tag,
+                                    "post_id" => $post_id,
+                                ]);
+                            } else {
+                                wp_send_json_error([
+                                    "status" => "error",
+                                    "message" => "Error inserting new record.",
+                                ]);
+                            }
                         } else {
                             wp_send_json_error([
                                 "Not_found_image" => "Image not found",
@@ -239,10 +291,11 @@ class CustomPlugin
                     "Not_found_image" => "No custom items found.",
                 ]);
             }
-        } else {
-            wp_send_json_error(["Error" => "Please enter a name."]);
         }
+    } else {
+        wp_send_json_error(["Error" => "Please enter a name."]);
     }
+}
 
     function game_page()
     {
@@ -258,14 +311,12 @@ class CustomPlugin
 
     function game_select()
     {
-        if (isset($_GET["letters"])) {
             $plugin_dir = plugin_dir_path(__FILE__);
             ob_start(); // Start output buffering
             include $plugin_dir . "/templates/game_select.php";
             $content = ob_get_contents(); // Capture the output
             ob_end_clean(); // End output buffering and clean the buffer
             return $content; // Return the captured output
-        }
     }
 
     function game_all_letters()
